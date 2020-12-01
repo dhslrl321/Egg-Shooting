@@ -4,7 +4,7 @@
 
 > 계란을 던져 다가오는 몬스터들을 물리쳐주세요!
 
-![게임 플레이 사진](#)
+![게임 플레이 사진](https://github.com/dhslrl321/Egg-Shooting/blob/master/images/intro.png)
 
 # 목차
 
