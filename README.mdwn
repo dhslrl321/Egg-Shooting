@@ -12,11 +12,11 @@
 
 - - [게임 설치 방법](#게임-설치-방법)
 - - [게임 플레이 방법](#게임-플레이-방법)
+- - [배경 음악](#배경-음악)
 
 2. ### [구현 로직](#구현-로직)
 
 - - [생명력 구현](#생명력-구현)
-- - [캐릭터 및 몬스터 렌더링](#캐릭터-및-몬스터-렌더링)
 - - [몬스터 생성](#몬스터-생성)
 - - [계란 투척](#계란-생성)
 - - [계랸 포물선 궤적](#계란-포물선-궤적)
@@ -44,28 +44,70 @@ $ docker run -d -p 80:80
 
 ## 게임 플레이 방법
 
-- 게임 시작 전에 검정 화면을 클릭해주세요!
+#### 게임 준비
+
+- 게임 시작 전에 검정 화면을 클릭해주세요.
+- 그리고 다시 화면을 클릭하면 노래가 나옵니다!
+
+#### 게임 시작
+
 - 몬스터가 나오기 전에 마우스를 클릭해서 궤적을 예측하세요!
 - 몬스터를 계란으로 맞춰 없애야합니다.
+
+#### 승리 조건
+
 - 15마리의 몬스터를 잡으면 승리해요!
 
----
+#### 게임 오버
 
-# 구현 로직
+- 5번의 생명력을 잃으면 패배해요 ..
 
 ## 배경 음악
 
 - [이곳에서 배경 음악을 미리 들을 수 있어요!](https://opengameart.org/content/one)
 
-## 캐릭터 및 몬스터 렌더링
+---
+
+# 구현 로직
 
 ## 생명력 구현
 
+![life]()
+
+- Global하게 선언된 `lifeCount` 값에 따라 `Select`문의 statement로 들어갑니다.
+- Project Asset 에서 생명력 이미지를 Load합니다.
+- `lifeCount`의 값이 5라면 5번의 `RectImage`를 canvas의 x, y 좌표에 따라 `DrawImageRect` 메서드를 통해 그립니다.
+- - `lifeCount`의 값이 0이 되면 게임이 종료된 것으로 보고 몬스터 객체의 `visible`을 false로 바꿉니다.
+- - 그리고 gameOver 이미지를 로드하여 Canvas에 그립니다.
+
 ## 몬스터 생성
+
+![monster](https://github.com/dhslrl321/Egg-Shooting/blob/master/images/monster-load.png)
+
+- monster은 `mojo` 패키지의 unit 객체를 이용합니다.
+- unit 객체의 Image를 Project Asset에서 각기 다른 이미지로 지정합니다.
+- 각각의 unit 객체의 x좌표와 y 좌표를 서로 다르게 줍니다.
+- 서로 다른 Respawn을 위해 x좌표를 각각 다른 값을 갖습니다.
+- 만약 각 몬스터의 x 좌표가 캐릭터를 넘어 화면에 보이지 않는다면 몬스터를 죽이지 못한 것으로 봅니다.
+- 몬스터가 죽지 않는다면 `lifeCount`를 -1 하고 x, y좌표를 최초의 상태로 되돌립니다.
 
 ## 계란 투척
 
+![egg](https://github.com/dhslrl321/Egg-Shooting/blob/master/images/par.png)
+
+- 위치가 계속 바뀌어야 하는 계란은 `myObject` 객체로 정의합니다.
+- 계란의 투척 속도는 0.7로 지정합니다.
+- 계란은 타원의 모양으로 현재 모양에 타원의 끝 접점에 Tan 의해 나온 값을 - 반복하여 회전하는 것 처럼 보입니다.
+- 회전하며 `speed * cos` 를 기존의 x 에 추가하면서 앞으로 나아갑니다.
+- 회전하며 `speed * sin` 를 기존의 y 에 추가하면서 위/아래로 움직입니다.
+- bullet.visible이 true 라면 다른 계란을 투적할 수 없도록 조건을 추가하였습니다.
+
 ## 포물선 궤적
+
+![](https://github.com/dhslrl321/Egg-Shooting/blob/master/images/monster-load.png)
+
+- bullet의 x와 대각선의 길이로 cos 값을 구하고 x 좌표를 speed \* 100에 곱하여 다음 위치로 Render합니다.
+- bullet의 y와 대각선의 길이로 sin 값을 구하고 y 좌표를 speed \* 100에 곱하여 다음 위치로 Render합니다.
 
 ---
 
